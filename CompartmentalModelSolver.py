@@ -8,12 +8,18 @@ class CompartmentalModelSolver:
     model:CompartmentalModel = None
     solved_odes = None
 
-    def __init__(self, initial_conditions, transfer_rates, days):
+    def __init__(self, ode_function, initial_conditions, transfer_rates, days):
         self.model = CompartmentalModel(initial_conditions, transfer_rates, days)
+        self.ode_function = ode_function
 
     def solve(self):
         tspan = np.arange(0, self.model.days, 1)
-        solved_odes = odeint(self.model.get_odes, self.model.initialValues, tspan, args=tuple([self.model.transfer_rates]))
+        solved_odes = odeint(
+            self.ode_function,
+            self.model.initialValues,
+            tspan,
+            args=(self.model.transfer_rates,)
+        )
         self.solved_odes = solved_odes[:, 0], solved_odes[:, 1], solved_odes[:, 2], solved_odes[:, 3]
 
     def _create_figure(self, lib):
