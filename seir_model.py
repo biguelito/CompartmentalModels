@@ -28,4 +28,4 @@ if __name__ == "__main__":
     transfer_rate = [beta, sigma, gamma]
     solver = CompartmentalModelSolver(seir_odes, initial_conditions, transfer_rate, days)
     solver.solve()
-    solver.save(GRAPH_LIB)
+    solver.save()

@@ -17,10 +17,10 @@ class CompartmentalGraph:
         steps = ceil(self.days / 5)
 
         fig = go.Figure()
-        fig.add_trace(go.Scatter(x=tspan, y=self.S, mode='lines+markers', name='Susceptible'))
-        fig.add_trace(go.Scatter(x=tspan, y=self.E, mode='lines+markers', name='Exposed'))
-        fig.add_trace(go.Scatter(x=tspan, y=self.I, mode='lines+markers', name='Infected'))
-        fig.add_trace(go.Scatter(x=tspan, y=self.R, mode='lines+markers', name='Recovered'))
+        fig.add_trace(go.Scatter(x=tspan, y=self.S, mode='lines+markers', name='Susceptíveis'))
+        fig.add_trace(go.Scatter(x=tspan, y=self.E, mode='lines+markers', name='Expostos'))
+        fig.add_trace(go.Scatter(x=tspan, y=self.I, mode='lines+markers', name='Infectados'))
+        fig.add_trace(go.Scatter(x=tspan, y=self.R, mode='lines+markers', name='Recuperados'))
 
         fig.update_layout(
             title='Simulation of SEIR Model',
