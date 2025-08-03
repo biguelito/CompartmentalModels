@@ -1,17 +1,6 @@
 import streamlit as st
 from CompartmentalModelSolver import CompartmentalModelSolver
-
-def seir_odes(initialValues, time, transfer_rates):
-    S, E, I, R = initialValues
-    beta, sigma, gamma = transfer_rates
-    N = S + E + I + R
-
-    dSdt = -beta * I * (S / N)
-    dEdt = beta * I * (S / N) - sigma * E
-    dIdt = sigma * E - gamma * I
-    dRdt = gamma * I
-
-    return [dSdt, dEdt, dIdt, dRdt]
+import models.seir
 
 initS = 1000000
 initE = 1
@@ -51,7 +40,7 @@ if st.button("▶️ Rodar Simulação"):
     initial_conditions = [S, E, I, R]
     transfer_rates = [beta, sigma, gamma]
 
-    solver = CompartmentalModelSolver(seir_odes, initial_conditions, transfer_rates, days)
+    solver = CompartmentalModelSolver(models.seir.odes, initial_conditions, transfer_rates, days)
     solver.solve()
 
     fig = solver.get_figure()
