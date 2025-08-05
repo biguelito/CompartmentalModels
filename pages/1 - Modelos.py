@@ -36,8 +36,9 @@ with col3:
 with col4:
     mu = st.number_input("mu - Mortalidade", value=float(seird.get_default("mu")), min_value=0.0)
 
-if st.button("▶️ Rodar Simulação"):
+if st.button("Rodar Simulação"):
     beta = r0 * gamma
+
     seir_initial_conditions = [S, E, I, R]
     seir_transfer_rates = [beta, sigma, gamma]
     seir_compartments = seir.COMPARTMENTS

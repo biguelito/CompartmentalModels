@@ -5,6 +5,32 @@ from models.seir import SEIR
 seir = SEIR()
 
 st.title("Modelo SEIR Interativo")
+st.image("models/figures/seir.png", caption="modelo SEIR", use_container_width=True)
+with st.expander("📘 Mostrar Equações do Modelo SEIR"):
+    st.latex(r'''
+    \frac{dS}{dt} = -\beta \cdot I \cdot \frac{S}{N}
+    ''')
+    st.latex(r'''
+    \frac{dE}{dt} = \beta \cdot I \cdot \frac{S}{N} - \sigma \cdot E
+    ''')
+    st.latex(r'''
+    \frac{dI}{dt} = \sigma \cdot  E - \gamma \cdot I
+    ''')
+    st.latex(r'''
+    \frac{dR}{dt} = \gamma \cdot I
+    ''')
+    st.markdown(r'''
+    **Onde:**
+    - S: suscetíveis  
+    - E: expostos  
+    - I: infectados  
+    - R: recuperados  
+    - β - beta: taxa de infecção  
+    - σ - sigma: taxa de incubação  
+    - γ - gamma: taxa de recuperação  
+    - N = S + E + I + R: população total  
+    ''')
+
 st.markdown("Configure os parâmetros abaixo e clique em **Rodar Simulação** para visualizar o gráfico.")
 
 days = st.number_input("Dias", value=int(seir.get_default("days")), min_value=0)
@@ -30,7 +56,7 @@ with SigmaCol2:
 with GammaCol3:
     gamma = st.number_input("gamma - Recuperação", value=float(seir.get_default("gamma")), min_value=0.0)
 
-if st.button("▶️ Rodar Simulação"):
+if st.button("Rodar Simulação"):
     beta = r0 * gamma
     initial_conditions = [S, E, I, R]
     transfer_rates = [beta, sigma, gamma]

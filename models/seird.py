@@ -26,8 +26,8 @@ class SEIRD:
         N = S + E + I + R + D
 
         dSdt = -beta * I * (S / N)
-        dEdt = beta * I * (S / N) - sigma * E
-        dIdt = sigma * E - gamma * I - mu * I
+        dEdt = beta * I * (S / N) - (sigma * E)
+        dIdt = (sigma * E) - (gamma * I) - (mu * I)
         dRdt = gamma * I
         dDdt = mu * I
 
