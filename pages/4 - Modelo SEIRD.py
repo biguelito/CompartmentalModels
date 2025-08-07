@@ -5,6 +5,36 @@ from models.seird import SEIRD
 seird = SEIRD()
 
 st.title("Modelo SEIRD Interativo")
+st.image("models/figures/seird.png", caption="modelo SEIRD", use_container_width=True)
+with st.expander("📘 Mostrar Equações do Modelo SEIRD"):
+    st.latex(r'''
+    \frac{dS}{dt} = -\beta \cdot I \cdot \frac{S}{N}
+    ''')
+    st.latex(r'''
+    \frac{dE}{dt} = \beta \cdot I \cdot \frac{S}{N} - \sigma \cdot E
+    ''')
+    st.latex(r'''
+    \frac{dI}{dt} = \sigma \cdot  E - \gamma \cdot I - \mu \cdot I
+    ''')
+    st.latex(r'''
+    \frac{dR}{dt} = \gamma \cdot I
+    ''')
+    st.latex(r'''
+    \frac{dD}{dt} = \mu \cdot I
+    ''')
+    st.markdown(r'''
+    **Onde:**
+    - S: suscetíveis  
+    - E: expostos  
+    - I: infectados  
+    - R: recuperados  
+    - β - beta: taxa de infecção  
+    - σ - sigma: taxa de incubação  
+    - γ - gamma: taxa de recuperação  
+    - α - alfa: taxa de perda de imunidade
+    - N = S + E + I + R: população total  
+    ''')
+
 st.markdown("Configure os parâmetros abaixo e clique em **Rodar Simulação** para visualizar o gráfico.")
 
 days = st.number_input("Dias", value=int(seird.get_default("days")), min_value=0)

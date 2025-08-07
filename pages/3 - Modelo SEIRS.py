@@ -5,6 +5,33 @@ from models.seirs import SEIRS
 seirs = SEIRS()
 
 st.title("Modelo SEIRS Interativo")
+st.image("models/figures/seirs.png", caption="modelo SEIR", use_container_width=True)
+with st.expander("📘 Mostrar Equações do Modelo SEIRS"):
+    st.latex(r'''
+    \frac{dS}{dt} = -\beta \cdot I \cdot \frac{S}{N} + \alpha \cdot R
+    ''')
+    st.latex(r'''
+    \frac{dE}{dt} = \beta \cdot I \cdot \frac{S}{N} - \sigma \cdot E
+    ''')
+    st.latex(r'''
+    \frac{dI}{dt} = \sigma \cdot  E - \gamma \cdot I
+    ''')
+    st.latex(r'''
+    \frac{dR}{dt} = \gamma \cdot I - \alpha \cdot R
+    ''')
+    st.markdown(r'''
+    **Onde:**
+    - S: suscetíveis  
+    - E: expostos  
+    - I: infectados  
+    - R: recuperados  
+    - β - beta: taxa de infecção  
+    - σ - sigma: taxa de incubação  
+    - γ - gamma: taxa de recuperação  
+    - α - alfa: taxa de perda de imunidade
+    - N = S + E + I + R: população total  
+    ''')
+
 st.markdown("Configure os parâmetros abaixo e clique em **Rodar Simulação** para visualizar o gráfico.")
 
 days = st.number_input("Dias", value=int(seirs.get_default("days")), min_value=0)
@@ -29,7 +56,7 @@ with col2:
 with col3:
     gamma = st.number_input("gamma - Recuperação", value=float(seirs.get_default("gamma")), min_value=0.0)
 with col4:
-    alfa = st.number_input("alfa - Imunidade", value=float(seirs.get_default("alfa")), min_value=0.0)
+    alfa = st.number_input("alfa - Perda de imunidade", value=float(seirs.get_default("alfa")), min_value=0.0)
 
 if st.button("Rodar Simulação"):
     beta = r0 * gamma
