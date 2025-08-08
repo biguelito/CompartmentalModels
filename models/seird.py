@@ -5,11 +5,12 @@ class SEIRD:
         "I": 1,
         "R": 0,
         "D": 0,
-        "sigma": 1/3,
-        "gamma": 1/2,
-        "mu": 0.3,
-        "r0": 4.0,
-        "days": 100
+        "beta": 0.4332,
+        "sigma": 0.192,
+        "gamma": 0.143,
+        "mu": 0.0014,
+        "r0": 3,
+        "days": 365
     }
 
     COMPARTMENTS = ["Susceptíveis", "Expostos", "Infectados", "Recuperados", "Mortos"]

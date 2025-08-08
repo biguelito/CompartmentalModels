@@ -48,16 +48,22 @@ with col4:
 
 st.markdown("### Taxas do Modelo SEIR")
 
-R0Col1, SigmaCol2, GammaCol3 = st.columns(3)
-with R0Col1:
-    r0 = st.number_input("R0", value=float(seir.get_default("r0")), min_value=0.0)
-with SigmaCol2:
-    sigma = st.number_input("sigma - Incubação", value=float(seir.get_default("sigma")), min_value=0.0)
-with GammaCol3:
-    gamma = st.number_input("gamma - Recuperação", value=float(seir.get_default("gamma")), min_value=0.0)
+use_beta = st.toggle("Inserir β (desligue para inserir R₀)", value=True)
+
+col1, col2, col3 = st.columns(3)
+with col1:
+    if use_beta:
+        beta = st.number_input("β (beta) - Transmissão", value=float(seir.get_default("beta")), min_value=0.0, step=0.0001, format="%.4f")
+    else:   
+        r0 = st.number_input("R0", value=float(seir.get_default("r0")), min_value=0.0, step=0.0001, format="%.4f")
+with col2:
+    sigma = st.number_input("σ (sigma) - Incubação", value=float(seir.get_default("sigma")), min_value=0.0, step=0.0001, format="%.4f")
+with col3:
+    gamma = st.number_input("γ (gamma) - Recuperação", value=float(seir.get_default("gamma")), min_value=0.0, step=0.0001, format="%.4f")
 
 if st.button("Rodar Simulação"):
-    beta = r0 * gamma
+
+    beta = beta if use_beta else r0 * gamma
     initial_conditions = [S, E, I, R]
     transfer_rates = [beta, sigma, gamma]
     compartments = seir.COMPARTMENTS

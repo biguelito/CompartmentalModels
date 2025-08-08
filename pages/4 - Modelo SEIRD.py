@@ -27,12 +27,13 @@ with st.expander("📘 Mostrar Equações do Modelo SEIRD"):
     - S: suscetíveis  
     - E: expostos  
     - I: infectados  
-    - R: recuperados  
+    - R: recuperados
+    - D: mortos  
     - β - beta: taxa de infecção  
     - σ - sigma: taxa de incubação  
     - γ - gamma: taxa de recuperação  
-    - α - alfa: taxa de perda de imunidade
-    - N = S + E + I + R: população total  
+    - μ - mu: taxa de mortalidade
+    - N = S + E + I + R + D: população total  
     ''')
 
 st.markdown("Configure os parâmetros abaixo e clique em **Rodar Simulação** para visualizar o gráfico.")
@@ -54,18 +55,24 @@ with row2_col2:
     D = st.number_input("Mortos (D)", value=int(seird.get_default("D")), min_value=0)
 
 st.markdown("### Taxas do Modelo SEIRD")
+
+use_beta = st.toggle("Inserir β (desligue para inserir R₀)", value=True)
+
 col1, col2, col3, col4 = st.columns(4)
 with col1:
-    r0 = st.number_input("R0", value=float(seird.get_default("r0")), min_value=0.0)
+    if use_beta:
+        beta = st.number_input("β (beta) - Transmissão", value=float(seird.get_default("beta")), min_value=0.0, step=0.0001, format="%.4f")
+    else:   
+        r0 = st.number_input("R0", value=float(seird.get_default("r0")), min_value=0.0, step=0.0001, format="%.4f")
 with col2:
-    sigma = st.number_input("sigma - Incubação", value=float(seird.get_default("sigma")), min_value=0.0)
+    sigma = st.number_input("σ (sigma) - Incubação", value=float(seird.get_default("sigma")), min_value=0.0, step=0.0001, format="%.4f")
 with col3:
-    gamma = st.number_input("gamma - Recuperação", value=float(seird.get_default("gamma")), min_value=0.0)
+    gamma = st.number_input("γ (gamma) - Recuperação", value=float(seird.get_default("gamma")), min_value=0.0, step=0.0001, format="%.4f")
 with col4:
-    mu = st.number_input("mu - Mortalidade", value=float(seird.get_default("mu")), min_value=0.0)
+    mu = st.number_input("μ (mu) - Mortalidade", value=float(seird.get_default("mu")), min_value=0.0, step=0.0001, format="%.4f")
 
 if st.button("Rodar Simulação"):
-    beta = r0 * gamma
+    beta = beta if use_beta else r0 * (gamma + mu)
     initial_conditions = [S, E, I, R, D]
     transfer_rates = [beta, sigma, gamma, mu]
     compartments = seird.COMPARTMENTS

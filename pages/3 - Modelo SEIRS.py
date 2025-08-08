@@ -5,7 +5,7 @@ from models.seirs import SEIRS
 seirs = SEIRS()
 
 st.title("Modelo SEIRS Interativo")
-st.image("models/figures/seirs.png", caption="modelo SEIR", use_container_width=True)
+st.image("models/figures/seirs.png", caption="modelo SEIRS", use_container_width=True)
 with st.expander("📘 Mostrar Equações do Modelo SEIRS"):
     st.latex(r'''
     \frac{dS}{dt} = -\beta \cdot I \cdot \frac{S}{N} + \alpha \cdot R
@@ -48,18 +48,24 @@ with col4:
     R = st.number_input("Recuperados (R)", value=int(seirs.get_default("R")), min_value=0)
 
 st.markdown("### Taxas do Modelo SEIRS")
+
+use_beta = st.toggle("Inserir β (desligue para inserir R₀)", value=True)
+
 col1, col2, col3, col4 = st.columns(4)
 with col1:
-    r0 = st.number_input("R0", value=float(seirs.get_default("r0")), min_value=0.0)
+    if use_beta:
+        beta = st.number_input("β (beta) - Transmissão", value=float(seirs.get_default("beta")), min_value=0.0, step=0.0001, format="%.4f")
+    else:   
+        r0 = st.number_input("R0", value=float(seirs.get_default("r0")), min_value=0.0, step=0.0001, format="%.4f")
 with col2:
-    sigma = st.number_input("sigma - Incubação", value=float(seirs.get_default("sigma")), min_value=0.0)
+    sigma = st.number_input("σ (sigma) - Incubação", value=float(seirs.get_default("sigma")), min_value=0.0, step=0.0001, format="%.4f")
 with col3:
-    gamma = st.number_input("gamma - Recuperação", value=float(seirs.get_default("gamma")), min_value=0.0)
+    gamma = st.number_input("γ (gamma) - Recuperação", value=float(seirs.get_default("gamma")), min_value=0.0, step=0.0001, format="%.4f")
 with col4:
-    alfa = st.number_input("alfa - Perda de imunidade", value=float(seirs.get_default("alfa")), min_value=0.0)
+    alfa = st.number_input("α (alfa) - Perda de imunidade", value=float(seirs.get_default("alfa")), min_value=0.0, step=0.0001, format="%.4f")
 
 if st.button("Rodar Simulação"):
-    beta = r0 * gamma
+    beta = beta if use_beta else r0 * gamma
     initial_conditions = [S, E, I, R]
     transfer_rates = [beta, sigma, gamma, alfa]
     compartments = seirs.COMPARTMENTS

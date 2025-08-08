@@ -4,10 +4,11 @@ class SEIR:
         "E": 1,
         "I": 1,
         "R": 0,
-        "sigma": 0.33,
-        "gamma": 0.5,
-        "r0": 4.0,
-        "days": 100
+        "beta": 0.429,
+        "sigma": 0.192,
+        "gamma": 0.143,
+        "r0": 3,
+        "days": 365
     }
     COMPARTMENTS = ["Susceptíveis", "Expostos", "Infectados", "Recuperados"]
 
