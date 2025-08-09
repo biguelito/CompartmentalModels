@@ -64,77 +64,78 @@ with row2_col1:
 with row2_col2:
     alfa = st.number_input("α (alfa) - Perda de imunidade", value=float(COVID_DEFAULTS["alfa"]), min_value=0.0, step=0.0001, format="%.4f")
 
+st.markdown("### Modelos a serem simulados")
+col1, col2, col3, col4 = st.columns(4)
+with col1:
+    do_seir = st.checkbox("SEIR", value=True)
+with col2:
+    do_seirs = st.checkbox("SEIRS", value=True)
+with col3:
+    do_seird = st.checkbox("SEIRD", value=True)
+with col4:
+    do_seirsd = st.checkbox("SEIRSD", value=True)
+
 if st.button("Rodar Simulação"):
+    figs = []
 
-    seir_beta = beta if use_beta else r0 * gamma
-    seir_initial_conditions = [S, E, I, R]
-    seir_transfer_rates = [seir_beta, sigma, gamma]
-    seir_compartments = seir.COMPARTMENTS
-    seir_solver = CompartmentalModelSolver(
-        ode_function=seir.odes,
-        initial_conditions=seir_initial_conditions,
-        transfer_rates=seir_transfer_rates,
-        days=days,
-        compartments=seir_compartments,
-        model_name="SEIR"
-    )
-    seir_solver.solve()
-    seir_fig = seir_solver.get_figure()
-        
-    seirs_beta = beta if use_beta else r0 * gamma
-    seirs_initial_conditions = [S, E, I, R]
-    seirs_transfer_rates = [seirs_beta, sigma, gamma, alfa]
-    seirs_compartments = seirs.COMPARTMENTS
-    solver = CompartmentalModelSolver(
-        ode_function=seirs.odes,
-        initial_conditions=seirs_initial_conditions,
-        transfer_rates=seirs_transfer_rates,
-        days=days,
-        compartments=seirs_compartments,
-        model_name="SEIRS"
-    )
-    solver.solve()
-    seirs_fig = solver.get_figure()
+    if do_seir:
+        seir_beta = beta if use_beta else r0 * gamma
+        solver = CompartmentalModelSolver(
+            ode_function=seir.odes,
+            initial_conditions=[S, E, I, R],
+            transfer_rates=[seir_beta, sigma, gamma],
+            days=days,
+            compartments=seir.COMPARTMENTS,
+            model_name="SEIR"
+        )
+        solver.solve()
+        figs.append(solver.get_figure())
 
-    seird_beta = beta if use_beta else r0 * (gamma + mu)
-    seird_initial_conditions = [S, E, I, R, D]
-    seird_transfer_rates = [seird_beta, sigma, gamma, mu]
-    seird_compartments = seird.COMPARTMENTS
-    seird_solver = CompartmentalModelSolver(
-        ode_function=seird.odes,
-        initial_conditions=seird_initial_conditions,
-        transfer_rates=seird_transfer_rates,
-        days=days,
-        compartments=seird_compartments,
-        model_name="SEIRD"
-    )
-    seird_solver.solve()
-    seird_fig = seird_solver.get_figure()
-    
-    seirsd_beta = beta if use_beta else r0 * (gamma + mu)
-    seirsd_initial_conditions = [S, E, I, R, D]
-    seirsd_transfer_rates = [seirsd_beta, sigma, gamma, alfa, mu]
-    seirsd_compartments = seirsd.COMPARTMENTS
-    seirsd_solver = CompartmentalModelSolver(
-        ode_function=seirsd.odes,
-        initial_conditions=seirsd_initial_conditions,
-        transfer_rates=seirsd_transfer_rates,
-        days=days,
-        compartments=seirsd_compartments,
-        model_name="SEIRSD"
-    )
-    seirsd_solver.solve()
-    seirsd_fig = seirsd_solver.get_figure()
+    if do_seirs:
+        seirs_beta = beta if use_beta else r0 * gamma
+        solver = CompartmentalModelSolver(
+            ode_function=seirs.odes,
+            initial_conditions=[S, E, I, R],
+            transfer_rates=[seirs_beta, sigma, gamma, alfa],
+            days=days,
+            compartments=seirs.COMPARTMENTS,
+            model_name="SEIRS"
+        )
+        solver.solve()
+        figs.append(solver.get_figure())
 
-    row1_col1, row1_col2 = st.columns(2)
-    row2_col1, row2_col2 = st.columns(2)
-    with row1_col1:
-        st.plotly_chart(seir_fig, use_container_width=True)
-    with row1_col2:
-        st.plotly_chart(seirs_fig, use_container_width=True)
-    with row2_col1:
-        st.plotly_chart(seird_fig, use_container_width=True)
-    with row2_col2:
-        st.plotly_chart(seirsd_fig, use_container_width=True)
+    if do_seird:
+        seird_beta = beta if use_beta else r0 * (gamma + mu)
+        solver = CompartmentalModelSolver(
+            ode_function=seird.odes,
+            initial_conditions=[S, E, I, R, D],
+            transfer_rates=[seird_beta, sigma, gamma, mu],
+            days=days,
+            compartments=seird.COMPARTMENTS,
+            model_name="SEIRD"
+        )
+        solver.solve()
+        figs.append(solver.get_figure())
+
+    if do_seirsd:
+        seirsd_beta = beta if use_beta else r0 * (gamma + mu)
+        solver = CompartmentalModelSolver(
+            ode_function=seirsd.odes,
+            initial_conditions=[S, E, I, R, D],
+            transfer_rates=[seirsd_beta, sigma, gamma, alfa, mu],
+            days=days,
+            compartments=seirsd.COMPARTMENTS,
+            model_name="SEIRSD"
+        )
+        solver.solve()
+        figs.append(solver.get_figure())
+
+    if figs:
+        for i in range(0, len(figs), 2):
+            cols = st.columns(2)
+            for col, fig in zip(cols, figs[i:i+2]):
+                col.plotly_chart(fig, use_container_width=True)
+    else:
+        st.warning("Selecione pelo menos um modelo para rodar a simulação.")
 else:
     st.info("Configure os parâmetros e clique em **Rodar Simulação**.")
