@@ -1,4 +1,4 @@
-# Impactos da perda de imunidade na mortalidade. Uma analise com modelo compartimental
+# Impactos da perda de imunidade na mortalidade. Uma análise com modelo compartimental
 
 [![📄 Scientific Report](https://img.shields.io/badge/📄_Scientific_Report-PDF-blue?style=for-the-badge)](https://github.com/biguelito/CompartmentalModels/blob/main/Modelo_compartimental.pdf)
 
