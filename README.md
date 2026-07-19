@@ -82,6 +82,11 @@ O repositório está organizado, numa visão simplificada, na seguinte arquitetu
     pip3 install -r requirements.txt
     ```
 
+3. **Execução**: Para executar localmente, basta rodar o comando
+    ```bash
+    streamlit run .\home.py
+    ```
+
 ### Remotamente 
 
 1. **Streamlit**: Outro meio de utilizar o projeto é acessar a interface já criada, acessível no [Streamlit](https://epidemiology-compartmentalmodels.streamlit.app/)
