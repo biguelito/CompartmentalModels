@@ -145,6 +145,10 @@ if st.button("Rodar Simulacao"):
                 floor(solver.solved_odes[:, idx].max())
                 for idx in range(len(compartments))
             ],
+            "Valor final": [
+                floor(solver.solved_odes[-1, idx])
+                for idx in range(len(compartments))
+            ],
         }
     )
     st.markdown("### Valores maximos de cada compartimento")
